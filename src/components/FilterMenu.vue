@@ -1,4 +1,5 @@
 <template>
+    
     <v-menu
         v-model="menu"
         :close-on-content-click="false"
@@ -11,7 +12,7 @@
         </template>
 
         <v-card width="250">
-        <v-card-title class="text-center">Filter</v-card-title>
+        <v-card-title class="text-start">Filter</v-card-title>
         <v-divider></v-divider>
         <v-select
             v-model="optionFilterName"
@@ -41,7 +42,7 @@
             <v-btn
             color="primary"
             variant="text"
-            @click="filterDeserts"
+            @click="fillFilter"
             >
             Apply
             </v-btn>
@@ -54,79 +55,18 @@
 <script setup>
     import { ref } from 'vue';
 
-    const props = defineProps(["filterSelect", "data", "collumnTitle", "filteredData"]);
-    const emits = defineEmits(["getFilteredData"])
+    const props = defineProps(["filterSelect", "index"]);
+
+    const emits = defineEmits(["getFilterValues"])
 
     const menu =  ref(false);
     const optionFilterName = ref('contains');
     const filterValue = ref('');
 
-    const containsFilter = ((item) => {
-        return item[props.collumnTitle].toString().toLowerCase().includes(filterValue.value.toLowerCase());
+    const fillFilter = (() => {
+        emits("getFilterValues", {index: props.index, filterOption: optionFilterName.value, filterVal: filterValue.value})
+        menu.value = false;
     })
 
-    const notContainsFilter = ((item) => {
-        return !item[props.collumnTitle].toString().toLowerCase().includes(filterValue.value.toLowerCase());
-    })
-
-    const startsWithFilter = ((item) => {
-        return item[props.collumnTitle].toString().toLowerCase().startsWith(filterValue.value.toLowerCase());
-    })
-
-    const equalsFilter = ((item) => {
-        return item[props.collumnTitle].toString().toLowerCase() == (filterValue.value.toLowerCase());
-    })
-
-    const notEqualsFilter = ((item, col) => {
-        return item[props.collumnTitle].toString().toLowerCase() != (filterValue.value.toLowerCase());
-    })
-
-
-    const filterDeserts = (() => {
-      let conditions = [];
-
-      if (filterValue.value) {
-        switch(optionFilterName.value){
-          case 'contains': {
-            conditions.push(containsFilter);
-            break;
-          }
-          case 'starts with': {
-            conditions.push(startsWithFilter);
-            break;
-          }
-          case 'not contains': {
-            conditions.push(notContainsFilter);
-            break;
-          }
-          case 'equals': {
-            conditions.push(equalsFilter);
-            break;
-          }
-          case 'not equals': {
-            conditions.push(notEqualsFilter);
-            break;
-          }
-          default:{
-            console.log('something wrong with the selection in filter section')
-          }
-        }
-        
-      }
-
-      if (conditions.length >= 0) {
-        emits("getFilteredData", props.filteredData.filter((item) => {
-          return conditions.every((condition) => {
-            return condition(item);
-          })
-        }))
-      }
-
-      // if (conditions.length == 0) {
-      //   emits("getFilteredData", props.data);
-      // }
-
-      menu.value = false;
-    })
-
+    
 </script>
