@@ -6,7 +6,7 @@
         location="bottom"
     >
         <template v-slot:activator="{ props }">
-        <v-icon small v-bind="props">
+        <v-icon small v-bind="props" :class="{ active : isActive}">
             mdi-filter
         </v-icon>
         </template>
@@ -62,11 +62,18 @@
     const menu =  ref(false);
     const optionFilterName = ref('contains');
     const filterValue = ref('');
+    const isActive = ref(false)
 
     const fillFilter = (() => {
+        filterValue.value ? isActive.value=true : isActive.value=false;
         emits("getFilterValues", {index: props.index, filterOption: optionFilterName.value, filterVal: filterValue.value})
         menu.value = false;
     })
 
-    
 </script>
+
+<style scoped>
+    .active{
+        color: #1E88E5;
+    }
+</style>
