@@ -14,12 +14,12 @@
     import TableFilter from './components/TableFilter.vue';
 
     const headers = ref([
-        { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name'},
-        { title: 'Calories', align: 'end', key: 'calories' },
-        { title: 'Fat (g)', align: 'end', key: 'fat' },
-        { title: 'Carbs (g)', align: 'end', key: 'carbs' },
-        { title: 'Protein (g)', align: 'end', key: 'protein' },
-        { title: 'Iron (%)', align: 'end', key: 'iron' },
+        { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', type: 'text'},
+        { title: 'Calories', align: 'end', key: 'calories', type: 'numeric'},
+        { title: 'Fat (g)', align: 'end', key: 'fat', type: 'numeric' },
+        { title: 'Carbs (g)', align: 'end', key: 'carbs', type: 'numeric' },
+        { title: 'Protein (g)', align: 'end', key: 'protein', type: 'numeric' },
+        { title: 'Iron (%)', align: 'end', key: 'iron', type: 'numeric' },
       ])
 
     const data = ref([

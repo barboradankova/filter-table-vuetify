@@ -21,7 +21,7 @@
           {{ column.title }} 
           <FilterMenu
             :key="header.key"
-            :filter-select="['contains', 'starts with', 'not contains', 'equals', 'not equals']"
+            :filter-select="getValidSelectors(header.type)"
             :index="index"
             @get-filter-values="getFilterValues"
           ></FilterMenu>
@@ -46,6 +46,20 @@
       
     onMounted(() => {
       filteredData.value = props.data;
+    })
+
+    const filterSelectorsText = ['contains', 'not contains', 'starts with', 'equals', 'not equals']
+    const filterSelectorsNumeric = ['contains', 'not contains', 'greater than', 'less than', 'equals', 'not equals']
+
+    const getValidSelectors = ((type) =>{
+        if (type == 'text'){
+            return filterSelectorsText
+        } else if (type == 'numeric') {
+            return filterSelectorsNumeric
+        } else {
+            // default
+            return filterSelectorsText
+        }
     })
 
     const filterValues = ref(new Array(props.headers.length))
@@ -80,6 +94,14 @@
         return item[columnTitle].toString().toLowerCase() != (filterValue.toLowerCase());
     })
 
+    const greaterThanFilter = ((item, columnTitle, filterValue) => {
+        return Number(item[columnTitle]) > Number(filterValue);
+    })
+
+    const lessThanFilter = ((item, columnTitle, filterValue) => {
+        return Number(item[columnTitle]) < Number(filterValue);
+    })
+
     const filterDeserts = (() => {
       let conditions = [];
 
@@ -105,6 +127,14 @@
                     }
                     case 'not equals': {
                         conditions.push({filterFunction: notEqualsFilter, columnToFilter: item.columnTitle, filterValue: item.filterValue});
+                        break;
+                    }
+                    case 'greater than': {
+                        conditions.push({filterFunction: greaterThanFilter, columnToFilter: item.columnTitle, filterValue: item.filterValue});
+                        break;
+                    }
+                    case 'less than': {
+                        conditions.push({filterFunction: lessThanFilter, columnToFilter: item.columnTitle, filterValue: item.filterValue});
                         break;
                     }
                     default:{
