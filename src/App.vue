@@ -1,8 +1,12 @@
 <template>
   <v-app theme="dark" >
-    <div class="mx-10">
+    <div class="ma-10">
+      <ColumnSelector
+        :headers="headers"
+        @select-headers-table="selectHeaders"
+      ></ColumnSelector>
         <TableFilter
-            :headers="headers"
+            :headers="selectedHeaders"
             :data="data"
         ></TableFilter>
     </div>
@@ -12,6 +16,9 @@
     import { ref } from 'vue'
 
     import TableFilter from './components/TableFilter.vue';
+    import ColumnSelector from './components/ColumnSelector.vue';
+
+    const selectedHeaders = ref([])
 
     const headers = ref([
         { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', type: 'text'},
@@ -105,6 +112,8 @@
           },
       ])
 
-
+      const selectHeaders = ((listOfColumns) => {
+        selectedHeaders.value = headers.value.filter((item) => listOfColumns.value.includes(item.title))
+      })
 
 </script>
