@@ -1,64 +1,27 @@
 <template>
   <v-app theme="dark" >
     <div class="mx-10">
-      
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify" 
-        label="Search..."
-        class="mt-10"
-      ></v-text-field>
-
-      
-      <v-data-table
-        :headers="headers"
-        :items="filteredData"
-        item-value="name"
-        class="elevation-1"
-        :search="search"
-        multi-sort
-        :loading="isLoading"
-        loading-text="Loading..."
-      >
-        <template v-for="header in headers" #[`column.${header.key}`]="{column}">
-          {{ column.title }}
-          <FilterMenu 
-          :filter-select="['contains', 'starts with', 'not contains', 'equals', 'not equals']"
-          :filtered-data="filteredData"
-          :data="data"
-          :collumn-title="header.key"
-          @get-filtered-data="changeData"
-          :key="header.key"
-          ></FilterMenu>
-        </template>
-
-
-      </v-data-table>
+        <TableFilter
+            :headers="headers"
+            :data="data"
+        ></TableFilter>
     </div>
   </v-app>
 </template>
 <script setup>
-  import { ref, onMounted } from 'vue'
-  import FilterMenu from './components/FilterMenu.vue';
+    import { ref } from 'vue'
 
-    const search = ref('')
-    
-    const isLoading = ref(false)
-    
+    import TableFilter from './components/TableFilter.vue';
+
     const headers = ref([
-        {
-          title: 'Dessert (100g serving)',
-          align: 'start',
-          sortable: false,
-          key: 'name',
-        },
-        { title: 'Calories', align: 'end', key: 'calories' },
-        { title: 'Fat (g)', align: 'end', key: 'fat' },
-        { title: 'Carbs (g)', align: 'end', key: 'carbs' },
-        { title: 'Protein (g)', align: 'end', key: 'protein' },
-        { title: 'Iron (%)', align: 'end', key: 'iron' },
+        { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', type: 'text'},
+        { title: 'Calories', align: 'end', key: 'calories', type: 'numeric'},
+        { title: 'Fat (g)', align: 'end', key: 'fat', type: 'numeric' },
+        { title: 'Carbs (g)', align: 'end', key: 'carbs', type: 'numeric' },
+        { title: 'Protein (g)', align: 'end', key: 'protein', type: 'numeric' },
+        { title: 'Iron (%)', align: 'end', key: 'iron', type: 'numeric' },
       ])
-    const filteredData = ref([])
+
     const data = ref([
           {
             name: 'Frozen Yogurt',
@@ -142,15 +105,6 @@
           },
       ])
 
-    onMounted(() => {
-      filteredData.value = data.value;
-    })
 
-    const changeData = ((newData) => {
-        filteredData.value = newData;
-    }
-
-    )
-    
 
 </script>
