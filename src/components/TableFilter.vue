@@ -4,7 +4,6 @@
             v-model="search"
             append-icon="mdi-magnify" 
             label="Search..."
-            class="mt-10"
         ></v-text-field>
 
         <v-data-table
