@@ -55,7 +55,7 @@
 <script setup>
     import { ref } from 'vue';
 
-    const props = defineProps(["filterSelect", "index"]);
+    const props = defineProps(["filterSelect", "indexKey"]);
 
     const emits = defineEmits(["getFilterValues"])
 
@@ -66,7 +66,7 @@
 
     const fillFilter = (() => {
         filterValue.value ? isActive.value=true : isActive.value=false;
-        emits("getFilterValues", {index: props.index, filterOption: optionFilterName.value, filterVal: filterValue.value})
+        emits("getFilterValues", {key: props.indexKey, filterOption: optionFilterName.value, filterVal: filterValue.value})
         menu.value = false;
     })
 

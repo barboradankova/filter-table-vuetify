@@ -7,7 +7,7 @@
         ></v-text-field>
 
         <v-data-table
-            :headers="props.headers"
+            :headers="props.selectedHeaders"
             :items="filteredData"
             item-value="name"
             class="elevation-1"
@@ -16,12 +16,12 @@
             :loading="isLoading"
             loading-text="Loading..."
         >
-        <template v-for="(header, index) in props.headers" #[`column.${header.key}`]="{column}">
+        <template v-for="(header, index) in props.selectedHeaders" #[`column.${header.key}`]="{column}">
           {{ column.title }} 
           <FilterMenu
             :key="header.key"
             :filter-select="getValidSelectors(header.type)"
-            :index="index"
+            :indexKey="header.key"
             @get-filter-values="getFilterValues"
           ></FilterMenu>
         </template>
@@ -34,7 +34,7 @@
     import { ref, onMounted, watch } from 'vue'
     import FilterMenu from './FilterMenu.vue';
 
-    const props = defineProps(["headers", "data"])
+    const props = defineProps(["headers", "selectedHeaders", "data"])
 
     const search = ref('')
     
@@ -68,8 +68,16 @@
     }
 
     const getFilterValues = ((filterInfo) => {
-        filterValues.value.at(filterInfo.index).filterOption = filterInfo.filterOption;
-        filterValues.value.at(filterInfo.index).filterValue = filterInfo.filterVal;
+        console.log(filterValues.value, filterInfo)
+        filterValues.value.map((item) => {
+            if(item.columnTitle == filterInfo.key) {
+                item.filterOption = filterInfo.filterOption;
+                item.filterValue = filterInfo.filterVal;
+            }
+            return item;   
+        });
+    
+        console.log(filterValues.value)
         filterDeserts();
     })
 

@@ -6,7 +6,8 @@
         @select-headers-table="selectHeaders"
       ></ColumnSelector>
         <TableFilter
-            :headers="selectedHeaders"
+            :selectedHeaders="selectedHeaders"
+            :headers="headers"
             :data="data"
         ></TableFilter>
     </div>
