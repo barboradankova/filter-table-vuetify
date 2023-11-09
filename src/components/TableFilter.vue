@@ -27,10 +27,11 @@
         </template>
 
         <template v-for="header in props.selectedHeaders" #[`item.${header.key}`]="{ item }">
-            <div v-if="typeof item[header.key] != 'boolean'" :key="header.key">{{ item[header.key] }}</div>
-            <v-chip v-if="typeof item[header.key] == 'boolean'" :key="header.key" :color="`${item[header.key] == true ? 'green-darken-2': 'red-darken-1'}`">
+            <div v-if="header.key != 'note' && typeof item[header.key] != 'boolean'" :key="header.key">{{ item[header.key] }}</div>
+            <v-chip v-if="header.key != 'note' && typeof item[header.key] == 'boolean'" :key="header.key" :color="`${item[header.key] == true ? 'green-darken-2': 'red-darken-1'}`">
                 {{ `${item[header.key] == true ? 'yes': 'no'}`}}
             </v-chip>
+            <PopupNote v-if="header.key == 'note'" :key="header.key" :note="item[header.key]"></PopupNote>          
         </template>
 
         </v-data-table>
@@ -40,19 +41,18 @@
 <script setup>
     import { ref, onMounted, watch } from 'vue'
     import FilterMenu from './FilterMenu.vue';
+    import PopupNote from './PopupNote.vue';
 
     const props = defineProps(["headers", "selectedHeaders", "data"])
 
     const search = ref('')
     
     const isLoading = ref(false)
+
+    const dialog = ref(false)
     
     
     const filteredData = ref([])
-
-    const getChipBooleanValues = (()=>{
-
-    })
       
     onMounted(() => {
       filteredData.value = props.data;
