@@ -16,7 +16,7 @@
             :loading="isLoading"
             loading-text="Loading..."
         >
-        <template v-for="(header, index) in props.selectedHeaders" #[`column.${header.key}`]="{column}">
+        <template v-for="(header, index) in props.selectedHeaders" #[`column.${header.key}`]="{ column }">
           {{ column.title }} 
           <FilterMenu
             :key="header.key"
@@ -24,6 +24,13 @@
             :indexKey="header.key"
             @get-filter-values="getFilterValues"
           ></FilterMenu>
+        </template>
+
+        <template v-for="header in props.selectedHeaders" #[`item.${header.key}`]="{ item }">
+            <div v-if="typeof item[header.key] != 'boolean'" :key="header.key">{{ item[header.key] }}</div>
+            <v-chip v-if="typeof item[header.key] == 'boolean'" :key="header.key" :color="`${item[header.key] == true ? 'green-darken-2': 'red-darken-1'}`">
+                {{ `${item[header.key] == true ? 'yes': 'no'}`}}
+            </v-chip>
         </template>
 
         </v-data-table>
@@ -42,6 +49,10 @@
     
     
     const filteredData = ref([])
+
+    const getChipBooleanValues = (()=>{
+
+    })
       
     onMounted(() => {
       filteredData.value = props.data;
@@ -49,16 +60,17 @@
 
     const filterSelectorsText = ['contains', 'not contains', 'starts with', 'equals', 'not equals']
     const filterSelectorsNumeric = ['contains', 'not contains', 'greater than', 'less than', 'equals', 'not equals']
+    const filterSelectorsBoolean = ['yes', 'no']
 
     const getValidSelectors = ((type) =>{
-        if (type == 'text'){
-            return filterSelectorsText
-        } else if (type == 'numeric') {
+        if (type == 'number'){
             return filterSelectorsNumeric
-        } else {
-            // default
-            return filterSelectorsText
         }
+        if (type == 'boolean') {
+            return filterSelectorsBoolean
+        }
+        // default
+        return filterSelectorsText
     })
 
     const filterValues = ref(new Array(props.headers.length))
@@ -141,6 +153,14 @@
                     }
                     case 'less than': {
                         conditions.push({filterFunction: lessThanFilter, columnToFilter: item.columnTitle, filterValue: item.filterValue});
+                        break;
+                    }
+                    case 'yes' : {
+                        conditions.push({filterFunction: equalsFilter, columnToFilter: item.columnTitle, filterValue: 'true'});
+                        break;
+                    }
+                    case 'no': {
+                        conditions.push({filterFunction: equalsFilter, columnToFilter: item.columnTitle, filterValue: 'false'});
                         break;
                     }
                     default:{

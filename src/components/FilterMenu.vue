@@ -17,12 +17,12 @@
         <v-select
             v-model="optionFilterName"
             :items="props.filterSelect"
-            value="contains"
             class="px-4 pt-4"
         ></v-select>
         
 
         <v-text-field
+            v-if="!props.filterSelect.includes('yes')"
             v-model="filterValue"
             class="px-4 pt-1"
             type="text"
@@ -34,15 +34,32 @@
             <v-spacer></v-spacer>
 
             <v-btn
+            v-if="!props.filterSelect.includes('yes')"
             variant="text"
             @click="filterValue = ''"
             >
             Clean
             </v-btn>
             <v-btn
+            v-if="props.filterSelect.includes('yes')"
+            variant="text"
+            @click="filterValue='', fillFilter()"
+            >
+            Dismiss
+            </v-btn>
+            <v-btn
+            v-if="!props.filterSelect.includes('yes')"
             color="primary"
             variant="text"
             @click="fillFilter"
+            >
+            Apply
+            </v-btn>
+            <v-btn
+            v-if="props.filterSelect.includes('yes')"
+            color="primary"
+            variant="text"
+            @click="filterValue='x', fillFilter()"
             >
             Apply
             </v-btn>
@@ -60,7 +77,7 @@
     const emits = defineEmits(["getFilterValues"])
 
     const menu =  ref(false);
-    const optionFilterName = ref('contains');
+    const optionFilterName = ref(props.filterSelect.includes('yes') ? 'yes' : 'contains');
     const filterValue = ref('');
     const isActive = ref(false)
 

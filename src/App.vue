@@ -16,6 +16,7 @@
 <script setup>
     import { ref } from 'vue'
     import TableFilter from './components/TableFilter.vue';
+    import ColumnSelector from './components/ColumnSelector.vue';
     import CP from '../data/places.json'
 
     const camelToFlat = ((camel) => {
@@ -28,7 +29,6 @@
       })  
       return flat
     })
-    import ColumnSelector from './components/ColumnSelector.vue';
 
     const selectedHeaders = ref([])
 
@@ -44,19 +44,31 @@
       return `${item.length*2.5}rem`
     })
 
+    const setAlign = ((value)=>{
+      if ( typeof value == 'number'){
+        return 'end'
+      }
+      if (typeof value == 'boolean'){
+        return 'center'
+      }
+      return 'start'
+    })
+
     const headers = ref(Object.keys(CP.pageItems[0]).map((item, index) => {
       return {
         title: camelToFlat(item),
         key: item,
-        type: typeof CP.pageItems[0][item] == 'number' ? 'numeric' : 'text',
-        width: setWidth(item),
-        align: typeof CP.pageItems[0][item] == 'number' ? 'end' : 'start'
+        type: typeof CP.pageItems[0][item],
+        
+        align: setAlign(CP.pageItems[0][item])
       }
     }))
 
+
     const data = ref(CP.pageItems)
-      const selectHeaders = ((listOfColumns) => {
-        selectedHeaders.value = headers.value.filter((item) => listOfColumns.value.includes(item.title))
-      })
+
+    const selectHeaders = ((listOfColumns) => {
+      selectedHeaders.value = headers.value.filter((item) => listOfColumns.value.includes(item.title))
+    })
 
 </script>
