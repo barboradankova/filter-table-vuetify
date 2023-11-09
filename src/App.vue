@@ -14,12 +14,12 @@
     import TableFilter from './components/TableFilter.vue';
 
     const headers = ref([
-        { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', type: 'text'},
-        { title: 'Calories', align: 'end', key: 'calories', type: 'numeric'},
-        { title: 'Fat (g)', align: 'end', key: 'fat', type: 'numeric' },
-        { title: 'Carbs (g)', align: 'end', key: 'carbs', type: 'numeric' },
-        { title: 'Protein (g)', align: 'end', key: 'protein', type: 'numeric' },
-        { title: 'Iron (%)', align: 'end', key: 'iron', type: 'numeric' },
+        { title: 'Dessert (100g serving)', align: 'start', sortable: false, key: 'name', type: 'string'},
+        { title: 'Calories', align: 'end', key: 'calories', type: 'number'},
+        { title: 'Fat (g)', align: 'end', key: 'fat', type: 'number' },
+        { title: 'Carbs (g)', align: 'end', key: 'carbs', type: 'number' },
+        { title: 'Protein (g)', align: 'end', key: 'protein', type: 'number' },
+        { title: 'Iron (%)', align: 'end', key: 'iron', type: 'bool' },
       ])
 
     const data = ref([
@@ -37,7 +37,7 @@
             fat: 0.0,
             carbs: 94,
             protein: 0.0,
-            iron: '0',
+            iron: 'yes',
           },
           {
             name: 'KitKat',
@@ -45,7 +45,7 @@
             fat: 26.0,
             carbs: 65,
             protein: 7,
-            iron: '6',
+            iron: 'no',
           },
           {
             name: 'Eclair',
