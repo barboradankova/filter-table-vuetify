@@ -68,7 +68,6 @@
     }
 
     const getFilterValues = ((filterInfo) => {
-        console.log(filterValues.value, filterInfo)
         filterValues.value.map((item) => {
             if(item.columnTitle == filterInfo.key) {
                 item.filterOption = filterInfo.filterOption;

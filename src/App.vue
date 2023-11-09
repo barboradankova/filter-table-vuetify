@@ -1,5 +1,5 @@
 <template>
-  <v-app theme="dark" >
+  <v-app theme="light" >
     <div class="ma-10">
       <ColumnSelector
         :headers="headers"
