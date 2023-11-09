@@ -50,16 +50,17 @@
 
     const filterSelectorsText = ['contains', 'not contains', 'starts with', 'equals', 'not equals']
     const filterSelectorsNumeric = ['contains', 'not contains', 'greater than', 'less than', 'equals', 'not equals']
+    const filterSelectorsBoolean = ['yes', 'no']
 
     const getValidSelectors = ((type) =>{
-        if (type == 'text'){
-            return filterSelectorsText
-        } else if (type == 'numeric') {
+        if (type == 'number'){
             return filterSelectorsNumeric
-        } else {
-            // default
-            return filterSelectorsText
         }
+        if (type == 'bool') {
+            return filterSelectorsBoolean
+        }
+        // default
+        return filterSelectorsText
     })
 
     const filterValues = ref(new Array(props.headers.length))
@@ -135,6 +136,14 @@
                     }
                     case 'less than': {
                         conditions.push({filterFunction: lessThanFilter, columnToFilter: item.columnTitle, filterValue: item.filterValue});
+                        break;
+                    }
+                    case 'yes' : {
+                        conditions.push({filterFunction: equalsFilter, columnToFilter: item.columnTitle, filterValue: 'yes'});
+                        break;
+                    }
+                    case 'no': {
+                        conditions.push({filterFunction: equalsFilter, columnToFilter: item.columnTitle, filterValue: 'no'});
                         break;
                     }
                     default:{
