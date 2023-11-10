@@ -1,20 +1,12 @@
 <template>
     <div>
-    <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify" 
-            label="Search..."
-        ></v-text-field>
-
         <v-data-table
             :headers="props.selectedHeaders"
             :items="filteredData"
             item-value="name"
             class="elevation-1"
-            :search="search"
+            :search="props.search"
             multi-sort
-            :loading="isLoading"
-            loading-text="Loading..."
         >
         <template v-for="(header, index) in props.selectedHeaders" #[`column.${header.key}`]="{ column }">
           {{ column.title }} 
@@ -43,14 +35,7 @@
     import FilterMenu from './FilterMenu.vue';
     import PopupNote from './PopupNote.vue';
 
-    const props = defineProps(["headers", "selectedHeaders", "data"])
-
-    const search = ref('')
-    
-    const isLoading = ref(false)
-
-    const dialog = ref(false)
-    
+    const props = defineProps(["headers", "selectedHeaders", "data", "search"])    
     
     const filteredData = ref([])
       

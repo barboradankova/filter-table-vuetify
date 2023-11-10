@@ -25,6 +25,4 @@
     const props_ = defineProps(["note"])
 
     const dialog = ref(false)
-
-    console.log(props_.note)
 </script>

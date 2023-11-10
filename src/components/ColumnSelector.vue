@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-auto w-75">
+    <div class="w-50 overflow-x-auto overflow-y-hidden x">
     <v-select
         v-model="selectedColumns"
         :items="props.headers"
@@ -7,28 +7,35 @@
         multiple
         chips
     >
-    <template v-slot:chip="{ chip, index }">
-        <v-chip 
-            :key="index"
-            class="pa-4 ma-1"
-            color="blue-darken-1"
-        >
-        </v-chip>
-    </template>
+        <template v-slot:chip="{ chip, index }">
+            <v-chip 
+                v-if="index < 5"
+                :key="index"
+                class="pa-4 ma-1"
+                color="blue-darken-1"
+            >
+            </v-chip>
+            <span
+                v-if="index === 5"
+                class="text-grey text-caption align-self-center"
+            >
+                (+{{ selectedColumns.length - 5 }} others)
+            </span>
+        </template>
 
-    <template v-slot:prepend-item>
-        <v-list-item
-            title="Select all"
-            @click="selectAllCol"
-        >
-            <template v-slot:prepend>
-                <v-checkbox-btn
-                    :model-value="isSelectedAll"
-                ></v-checkbox-btn>
-            </template>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
-    </template>
+        <template v-slot:prepend-item>
+            <v-list-item
+                title="Select all"
+                @click="selectAllCol"
+            >
+                <template v-slot:prepend>
+                    <v-checkbox-btn
+                        :model-value="isSelectedAll"
+                    ></v-checkbox-btn>
+                </template>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
+        </template>
     </v-select>
     </div>
 </template>
@@ -64,3 +71,7 @@
     })
 
 </script>
+
+<style scoped>
+
+</style>

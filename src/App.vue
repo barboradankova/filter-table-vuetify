@@ -1,23 +1,32 @@
 <template>
   <v-app theme="light" >
-    <div class="ma-10">
-      <ColumnSelector
+    <v-card class="ma-10 pa-5">
+      <v-card-title>Consumption Places</v-card-title>
+      <TableHeaderCard
         :headers="headers"
         @select-headers-table="selectHeaders"
-      ></ColumnSelector>
+        @set-search-table="setSearch"
+      ></TableHeaderCard>
         <TableFilter
             :selectedHeaders="selectedHeaders"
             :headers="headers"
             :data="data"
+            :search="search"
         ></TableFilter>
-    </div>
+    </v-card>
   </v-app>
 </template>
+
 <script setup>
     import { ref } from 'vue'
-    import TableFilter from './components/TableFilter.vue';
-    import ColumnSelector from './components/ColumnSelector.vue';
     import CP from '../data/places.json'
+
+    import TableFilter from './components/TableFilter.vue'
+    import TableHeaderCard from './components/TableHeaderCard.vue'
+
+    const search = ref('')
+
+    const setSearch = ((newValue) => {search.value = newValue})
 
     const camelToFlat = ((camel) => {
       const camelCase =camel.replace(/([a-z])([A-Z])/g, '$1 $2').split(" ")
